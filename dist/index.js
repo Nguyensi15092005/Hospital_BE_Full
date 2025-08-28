@@ -46,7 +46,12 @@ dotenv_1.default.config();
 database.connect();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3006;
-app.use((0, cors_1.default)());
+var corsOptions = {
+    origin: 'https://benhvien-hospital.vercel.app/',
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 (0, index_route_1.default)(app);

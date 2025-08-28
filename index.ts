@@ -13,13 +13,13 @@ const app: Express = express();
 const port: Number | String = process.env.PORT || 3006;
 
 //cort
-// var corsOptions = {
-//     origin: 'http://localhost:3007',
-//     credentials: true,
-//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// }
-// app.use(cors(corsOptions));
-app.use(cors());
+var corsOptions = {
+    origin: 'https://benhvien-hospital.vercel.app/',
+    credentials: true,
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+app.use(cors(corsOptions));
+
 
 // Dùng đc req.body
 app.use(express.json());
