@@ -27,33 +27,36 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!existEmail) {
             res.json({
                 code: 400,
-                message: "Email này không tồn tại!"
+                message: "Email này không tồn tại!",
             });
             return;
         }
-        ;
         if (existEmail.name !== name) {
             res.json({
                 code: 400,
-                message: "Sai tên đăng nhập!"
+                message: "Sai tên đăng nhập!",
             });
             return;
         }
         if ((0, md5_1.default)(password) !== existEmail.password) {
             res.json({
                 code: 400,
-                message: "Sai mật khâu!"
+                message: "Sai mật khâu!",
             });
             return;
         }
-        ;
         const tokenAdmin = existEmail.tokenAdmin;
-        res.cookie("tokenAdmin", tokenAdmin);
+        res.cookie("tokenAdmin", tokenAdmin, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 24 * 60 * 60 * 1000,
+        });
         res.cookie("accountName", existEmail.name);
         res.json({
             code: 200,
             message: "Đăng nhập thành công",
-            role_id: existEmail["role_id"]
+            role_id: existEmail["role_id"],
         });
     }
     catch (error) {
