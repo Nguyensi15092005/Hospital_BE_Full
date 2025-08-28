@@ -34,14 +34,9 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
     const tokenAdmin = existEmail.tokenAdmin;
-    res.cookie("tokenAdmin", tokenAdmin, {
-      httpOnly: true, // FE không đọc được (bảo mật)
-      secure: true, // bắt buộc HTTPS
-      sameSite: "none", // cho phép cross-domain
-      maxAge: 24 * 60 * 60 * 1000, // 1 ngày
-    });
-    res.cookie("accountName", existEmail.name);
     res.json({
+      tokenAdmin,
+      accountName: existEmail.name,
       code: 200,
       message: "Đăng nhập thành công",
       role_id: existEmail["role_id"],

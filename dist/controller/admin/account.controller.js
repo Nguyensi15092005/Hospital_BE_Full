@@ -46,14 +46,9 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         const tokenAdmin = existEmail.tokenAdmin;
-        res.cookie("tokenAdmin", tokenAdmin, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 24 * 60 * 60 * 1000,
-        });
-        res.cookie("accountName", existEmail.name);
         res.json({
+            tokenAdmin,
+            accountName: existEmail.name,
             code: 200,
             message: "Đăng nhập thành công",
             role_id: existEmail["role_id"],
