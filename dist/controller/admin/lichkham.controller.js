@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendmail = exports.del = exports.changeStatus = exports.edit = exports.detail = exports.create = exports.index = void 0;
+exports.getDateNowLichkhamUser = exports.getLinhkhamUser = exports.sendmail = exports.del = exports.changeStatus = exports.edit = exports.detail = exports.create = exports.index = void 0;
 const lichkham_model_1 = __importDefault(require("../../models/lichkham.model"));
 const khoa_model_1 = __importDefault(require("../../models/khoa.model"));
 const bacsi_model_1 = __importDefault(require("../../models/bacsi.model"));
@@ -21,9 +21,8 @@ const setting_model_1 = __importDefault(require("../../models/setting.model"));
 const sendMail_1 = require("../../helper/sendMail");
 const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        ;
         let find = {
-            deleted: false
+            deleted: false,
         };
         const objectSearch = (0, Search_helper_1.default)(req.query);
         if (objectSearch.regex) {
@@ -33,11 +32,11 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield Promise.all(lichkham.map((item) => __awaiter(void 0, void 0, void 0, function* () {
             const khoa = yield khoa_model_1.default.findOne({
                 _id: item.khoa_id,
-                deleted: false
+                deleted: false,
             });
             const bacsi = yield bacsi_model_1.default.findOne({
                 _id: item.bacsi_id,
-                deleted: false
+                deleted: false,
             });
             if (khoa) {
                 item["nameKhoa"] = khoa.name;
@@ -48,7 +47,7 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         })));
         res.json({
             code: 200,
-            lichkham
+            lichkham,
         });
     }
     catch (error) {
@@ -59,9 +58,10 @@ exports.index = index;
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = new lichkham_model_1.default(req.body);
+        console.log(data);
         yield data.save();
         res.json({
-            code: 200
+            code: 200,
         });
     }
     catch (error) {
@@ -74,11 +74,11 @@ const detail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const id = req.params.id;
         const lichkham = yield lichkham_model_1.default.findOne({
             _id: id,
-            deleted: false
+            deleted: false,
         });
         res.json({
             code: 200,
-            lichkham
+            lichkham,
         });
     }
     catch (error) {
@@ -92,11 +92,11 @@ const edit = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield lichkham_model_1.default.updateOne({ _id: id }, req.body);
         const lichkham = yield lichkham_model_1.default.findOne({
             _id: id,
-            deleted: false
+            deleted: false,
         });
         res.json({
             code: 200,
-            lichkham
+            lichkham,
         });
     }
     catch (error) {
@@ -129,7 +129,7 @@ const del = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const id = req.params.id;
         yield lichkham_model_1.default.updateOne({ _id: id }, { deleted: true });
         res.json({
-            code: 200
+            code: 200,
         });
     }
     catch (error) {
@@ -146,7 +146,7 @@ const sendmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const subject = `Bệnh viện ${name[0].name}`;
         (0, sendMail_1.sendMail)(user_email, subject, message);
         res.json({
-            code: 200
+            code: 200,
         });
     }
     catch (error) {
@@ -154,3 +154,69 @@ const sendmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.sendmail = sendmail;
+const getLinhkhamUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.params.userId;
+        const lichkhamUser = yield lichkham_model_1.default.find({
+            user_id: userId,
+            deleted: false,
+        }).lean();
+        for (const item of lichkhamUser) {
+            if (item.bacsi_id !== "") {
+                const bacsi = yield bacsi_model_1.default.findOne({
+                    _id: item.bacsi_id,
+                    deleted: false,
+                });
+                item["bacsiName"] = bacsi.fullName;
+            }
+            const khoa = yield khoa_model_1.default.findOne({
+                _id: item.khoa_id,
+                deleted: false,
+            });
+            item["khoaName"] = khoa.name;
+        }
+        console.log(lichkhamUser);
+        res.json({
+            code: 200,
+            lichkhamUser
+        });
+    }
+    catch (error) {
+        console.log("loi..............", error);
+    }
+});
+exports.getLinhkhamUser = getLinhkhamUser;
+const getDateNowLichkhamUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log("Chayj ddc vao day");
+        const userId = req.params.userId;
+        const lichkhamUser = yield lichkham_model_1.default.find({
+            user_id: userId,
+            deleted: false,
+            examination_date: { $gt: new Date() }
+        }).lean();
+        for (const item of lichkhamUser) {
+            if (item.bacsi_id !== "") {
+                const bacsi = yield bacsi_model_1.default.findOne({
+                    _id: item.bacsi_id,
+                    deleted: false,
+                });
+                item["bacsiName"] = bacsi.fullName;
+                item["imageBacsi"] = bacsi.image;
+            }
+            const khoa = yield khoa_model_1.default.findOne({
+                _id: item.khoa_id,
+                deleted: false,
+            });
+            item["khoaName"] = khoa.name;
+        }
+        res.json({
+            code: 200,
+            lichkhamUser: lichkhamUser.reverse()
+        });
+    }
+    catch (error) {
+        console.log("loi..............", error);
+    }
+});
+exports.getDateNowLichkhamUser = getDateNowLichkhamUser;

@@ -9,7 +9,7 @@ import Setting from "./setting.route";
 import TheChucNang from "./thechucnang.route";
 import DichVuKhamBenh from "./dichvukhambenh.route";
 import TinTuc from "./tintuc.model";
-
+import User from "./user.router";
 
 
 
@@ -26,6 +26,7 @@ const routerClient = (app: Express): void =>{
     app.use("/api/the-chuc-nang", TheChucNang);
     app.use("/api/dich-vu-kham-benh", DichVuKhamBenh);
     app.use("/api/tin-tuc-su-kien", TinTuc);
+    app.use("/api/user", User);
 
 
 }

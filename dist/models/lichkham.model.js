@@ -7,6 +7,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const lichKhamSchema = new mongoose_1.default.Schema({
     khoa_id: String,
     bacsi_id: String,
+    user_id: String,
     service: String,
     fullName: String,
     phone: String,

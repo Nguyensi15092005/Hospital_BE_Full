@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const lichKhamSchema = new mongoose.Schema({
     khoa_id: String,
     bacsi_id: String,
+    user_id: String,
     service: String,
     fullName: String,
     phone: String,

@@ -17,10 +17,9 @@ routes.delete("/delete/:id", controller.del);
 
 routes.patch("/change-status/:id/:status", controller.changeStatus);
 
+routes.get("/user/:userId", controller.getLinhkhamUser);
 
-
-
-
+routes.get("/user-date-now/:userId", controller.getDateNowLichkhamUser);
 
 
 export default routes;
