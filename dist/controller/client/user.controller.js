@@ -26,41 +26,41 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const password = req.body.password;
         console.log((0, md5_1.default)(password));
         const user = yield user_model_1.default.findOne({
-            email: email
+            email: email,
         });
         console.log(user.password);
         if (!user) {
             console.log("Email đã tồn tại");
             res.json({
                 code: 401,
-                message: "Email không đúng"
+                message: "Email không đúng",
             });
             return;
         }
         if (user.phone !== phone) {
             res.json({
                 code: 401,
-                message: "Số điện thoại không đúng"
+                message: "Số điện thoại không đúng",
             });
         }
         if (user.password !== (0, md5_1.default)(password)) {
             console.log("sai mk");
             res.json({
                 code: 500,
-                message: "Sai mật khẩu"
+                message: "Sai mật khẩu",
             });
             return;
         }
         res.json({
             code: 200,
             user: user,
-            message: "Đăng nhập thành công"
+            message: "Đăng nhập thành công",
         });
     }
     catch (error) {
         res.json({
             code: 400,
-            message: "Đăng nhập thất bại"
+            message: "Đăng nhập thất bại",
         });
     }
 });
@@ -73,13 +73,13 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const phone = req.body.phone;
         const password = req.body.password;
         const user = yield user_model_1.default.findOne({
-            email: email
+            email: email,
         });
         if (user) {
             console.log("Email da ton tai");
             res.json({
                 code: 500,
-                message: "Email đã tồn tại"
+                message: "Email đã tồn tại",
             });
             return;
         }
@@ -87,7 +87,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             console.log("Số điện thoại nãy đã được đăng ký");
             res.json({
                 code: 500,
-                message: "Số điện thoại nãy đã được đăng ký"
+                message: "Số điện thoại nãy đã được đăng ký",
             });
             return;
         }
@@ -101,32 +101,30 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log(data);
         yield data.save();
         res.json({
-            code: 200
+            code: 200,
         });
     }
-    catch (error) {
-    }
+    catch (error) { }
 });
 exports.register = register;
 const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const email = req.body.email;
         const user = yield user_model_1.default.findOne({
-            email: email
+            email: email,
         });
         if (!user) {
             res.json({
                 code: 404,
-                message: "Tài khoản không tồn tại"
+                message: "Tài khoản không tồn tại",
             });
             return;
         }
-        ;
         const otp = (0, generate_1.randomNumber)(6);
         const dataForgot = new forgot_password_model_1.default({
             email: email,
             otp: otp,
-            expireAt: Date.now()
+            expireAt: Date.now(),
         });
         yield dataForgot.save();
         const subject = "Mã OTP xác minh đổi mật khẩu bạn không nên chia sẻ cho người khác về vấn đề bảo mật";
@@ -134,13 +132,13 @@ const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
         (0, sendMail_1.sendMail)(email, subject, html);
         res.json({
             code: 200,
-            message: "gưởi OTP thành công"
+            message: "Gửi OTP thành công",
         });
     }
     catch (error) {
         res.json({
             code: 400,
-            message: "Thất bại"
+            message: "Thất bại",
         });
     }
 });
@@ -150,36 +148,36 @@ const otpPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const email = req.body.email;
         const otp = req.body.otp;
         const user = yield forgot_password_model_1.default.findOne({
-            email: email
+            email: email,
         });
         if (!user) {
             res.json({
                 code: 404,
-                message: "Mã OTP không tồn tại"
+                message: "Mã OTP không tồn tại",
             });
             return;
         }
         if (user.otp != otp) {
             res.json({
                 code: 403,
-                message: "Sai mã OTP"
+                message: "Sai mã OTP",
             });
             return;
         }
         console.log("Thanh cong");
         const userToken = yield user_model_1.default.findOne({
-            email: email
+            email: email,
         });
         res.json({
             code: 200,
             message: "Nhập mã OTP thành công",
-            token: userToken.token
+            token: userToken.token,
         });
     }
     catch (error) {
         res.json({
             code: 400,
-            message: "Thất bại"
+            message: "Thất bại",
         });
     }
 });
@@ -191,19 +189,19 @@ const passwordReset = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         console.log(password);
         console.log(token);
         yield user_model_1.default.updateOne({
-            token: token
+            token: token,
         }, {
-            password: (0, md5_1.default)(password)
+            password: (0, md5_1.default)(password),
         });
         res.json({
             code: 200,
-            message: "Đổi mật khẩu thành công"
+            message: "Đổi mật khẩu thành công",
         });
     }
     catch (error) {
         res.json({
             code: 400,
-            message: "Thất bại"
+            message: "Thất bại",
         });
     }
 });
