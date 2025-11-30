@@ -131,6 +131,7 @@ const lichhen = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             .sort({ examination_date: -1 })
             .limit(8)
             .select("examination_date fullName");
+        console.log(lichhen);
         res.json(lichhen);
     }
     catch (error) {

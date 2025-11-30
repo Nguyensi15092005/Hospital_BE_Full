@@ -48,7 +48,7 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         res.json({
             code: 200,
-            bacsi: bacsi,
+            bacsi: bacsi.reverse()
         });
     }
     catch (error) {

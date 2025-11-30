@@ -30,24 +30,28 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const lichkham = yield lichkham_model_1.default.find(find).lean();
         yield Promise.all(lichkham.map((item) => __awaiter(void 0, void 0, void 0, function* () {
-            const khoa = yield khoa_model_1.default.findOne({
-                _id: item.khoa_id,
-                deleted: false,
-            });
-            const bacsi = yield bacsi_model_1.default.findOne({
-                _id: item.bacsi_id,
-                deleted: false,
-            });
-            if (khoa) {
-                item["nameKhoa"] = khoa.name;
+            if (item.khoa_id) {
+                const khoa = yield khoa_model_1.default.findOne({
+                    _id: item.khoa_id,
+                    deleted: false,
+                });
+                if (khoa) {
+                    item["nameKhoa"] = khoa.name;
+                }
             }
-            if (bacsi) {
-                item["nameBacsi"] = bacsi.fullName;
+            if (item.bacsi_id) {
+                const bacsi = yield bacsi_model_1.default.findOne({
+                    _id: item.bacsi_id,
+                    deleted: false,
+                });
+                if (bacsi) {
+                    item["nameBacsi"] = bacsi.fullName;
+                }
             }
         })));
         res.json({
             code: 200,
-            lichkham,
+            lichkham: lichkham,
         });
     }
     catch (error) {
@@ -178,7 +182,7 @@ const getLinhkhamUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         console.log(lichkhamUser);
         res.json({
             code: 200,
-            lichkhamUser
+            lichkhamUser,
         });
     }
     catch (error) {
@@ -193,7 +197,7 @@ const getDateNowLichkhamUser = (req, res) => __awaiter(void 0, void 0, void 0, f
         const lichkhamUser = yield lichkham_model_1.default.find({
             user_id: userId,
             deleted: false,
-            examination_date: { $gt: new Date() }
+            examination_date: { $gt: new Date() },
         }).lean();
         for (const item of lichkhamUser) {
             if (item.bacsi_id !== "") {
@@ -212,7 +216,7 @@ const getDateNowLichkhamUser = (req, res) => __awaiter(void 0, void 0, void 0, f
         }
         res.json({
             code: 200,
-            lichkhamUser: lichkhamUser.reverse()
+            lichkhamUser: lichkhamUser.reverse(),
         });
     }
     catch (error) {

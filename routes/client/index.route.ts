@@ -10,6 +10,7 @@ import TheChucNang from "./thechucnang.route";
 import DichVuKhamBenh from "./dichvukhambenh.route";
 import TinTuc from "./tintuc.model";
 import User from "./user.router";
+import Lichham from "./lichkham.route";
 
 
 
@@ -27,6 +28,8 @@ const routerClient = (app: Express): void =>{
     app.use("/api/dich-vu-kham-benh", DichVuKhamBenh);
     app.use("/api/tin-tuc-su-kien", TinTuc);
     app.use("/api/user", User);
+    app.use("/api/lich-kham", Lichham);
+
 
 
 }

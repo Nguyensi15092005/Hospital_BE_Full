@@ -47,10 +47,17 @@ export const index = async (req: Request, res: Response) => {
         item["nameKhoa"] = khoa["name"]
       }
     }
-    res.json({
-      code: 200,
-      bacsi: bacsi,
-    })
+    // res.json({
+    //   code: 200,
+    //   bacsi: bacsi,
+    // })
+
+    res.json(
+      {
+        code: 200,
+        bacsi: bacsi.reverse()
+      }
+    )
   } catch (error) {
     console.log("Lỗi ........", error);
   }

@@ -16,6 +16,7 @@ exports.login = void 0;
 const md5_1 = __importDefault(require("md5"));
 const account_model_1 = __importDefault(require("../../models/account.model"));
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Chay vao login");
     try {
         const name = req.body.name;
         const email = req.body.email;

@@ -14,6 +14,7 @@ const thechucnang_route_1 = __importDefault(require("./thechucnang.route"));
 const dichvukhambenh_route_1 = __importDefault(require("./dichvukhambenh.route"));
 const tintuc_model_1 = __importDefault(require("./tintuc.model"));
 const user_router_1 = __importDefault(require("./user.router"));
+const lichkham_route_1 = __importDefault(require("./lichkham.route"));
 const routerClient = (app) => {
     app.use("/api/bac-si", bacsi_route_1.default);
     app.use("/api/trang-thiet-bi", thietbi_route_1.default);
@@ -26,5 +27,6 @@ const routerClient = (app) => {
     app.use("/api/dich-vu-kham-benh", dichvukhambenh_route_1.default);
     app.use("/api/tin-tuc-su-kien", tintuc_model_1.default);
     app.use("/api/user", user_router_1.default);
+    app.use("/api/lich-kham", lichkham_route_1.default);
 };
 exports.default = routerClient;

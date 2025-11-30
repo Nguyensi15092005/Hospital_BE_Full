@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import Account from "../../models/account.model";
 
 export const login = async (req: Request, res: Response) => {
+  console.log("Chay vao login");
   try {
     const name: string = req.body.name;
     const email: string = req.body.email;
@@ -34,6 +35,7 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
     const tokenAdmin = existEmail.tokenAdmin;
+
     res.json({
       tokenAdmin,
       accountName: existEmail.name,

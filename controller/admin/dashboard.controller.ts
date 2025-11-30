@@ -115,9 +115,12 @@ export const lichhen = async (req: Request, res: Response) => {
             status: true,
             examination_date: { $gte: new Date() } // 
         })
-            .sort({ examination_date: -1 })
-            .limit(8)
-            .select("examination_date fullName")
+        .sort({ examination_date: -1 })
+        .limit(8)
+        .select("examination_date fullName");
+        
+        console.log(lichhen);
+        
             
         res.json(lichhen);
     } catch (error) {

@@ -16,31 +16,26 @@ import DichVuKhamBenh from "./dichvukhambenh.route";
 import TinTuc from "./tintuc.route";
 import Role from "./role.route";
 import Dashboard from "./dashboard.route";
-
-
-
+import requireAuth from '../../middleware/auth.middleware';
 
 
 const routerAdmin = (app:Express): void =>{
-    app.use("/api/admin", Dashboard);
-    app.use("/api/admin/bac-si", BacSi);
-    app.use("/api/admin/khoa", Khoa);
-    app.use("/api/admin/benh-nhan", BenhNhan);
-    app.use("/api/admin/trang-thiet-bi", TrangThietBi);
+    app.use("/api/admin/dashboard",requireAuth, Dashboard);
+    app.use("/api/admin/bac-si", requireAuth, BacSi);
+    app.use("/api/admin/khoa", requireAuth, Khoa);
+    app.use("/api/admin/benh-nhan", requireAuth, BenhNhan);
+    app.use("/api/admin/trang-thiet-bi", requireAuth, TrangThietBi);
     app.use("/api/admin/auth", Auth);
-    app.use("/api/admin/tai-khoan-admin", TaiKhoanAdmin);
-    app.use("/api/admin/nhom-quyen", NhomQuyen);
-    app.use("/api/admin/lich-kham", LichKham);
-    app.use("/api/admin/gioi-thieu", GioiThieu);
-    app.use("/api/admin/lien-he", Contact);
+    app.use("/api/admin/tai-khoan-admin", requireAuth, TaiKhoanAdmin);
+    app.use("/api/admin/nhom-quyen", requireAuth, NhomQuyen);
+    app.use("/api/admin/lich-kham", requireAuth, LichKham);
+    app.use("/api/admin/gioi-thieu", requireAuth, GioiThieu);
+    app.use("/api/admin/lien-he", requireAuth, Contact);
     app.use("/api/admin/banner", Banner);
-    app.use("/api/admin/cai-dat-chung", Setting);
-    app.use("/api/admin/the-chuc-nang", TheChucNang);
-    app.use("/api/admin/dich-vu-kham-benh", DichVuKhamBenh);
+    app.use("/api/admin/cai-dat-chung", requireAuth, Setting);
+    app.use("/api/admin/the-chuc-nang", requireAuth, TheChucNang);
+    app.use("/api/admin/dich-vu-kham-benh", requireAuth, requireAuth, DichVuKhamBenh);
     app.use("/api/admin/tin-tuc-su-kien", TinTuc);
-    app.use("/api/admin/phan-quyen", Role);
-
-
-
+    app.use("/api/admin/phan-quyen", requireAuth, Role);
 }
 export default routerAdmin;

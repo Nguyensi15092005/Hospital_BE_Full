@@ -129,7 +129,7 @@ const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
         yield dataForgot.save();
         const subject = "Mã OTP xác minh đổi mật khẩu bạn không nên chia sẻ cho người khác về vấn đề bảo mật";
         const html = `Mã OTP là <b>${otp}</b> thời hạn là 3 phút`;
-        (0, sendMail_1.sendMail)(email, subject, html);
+        yield (0, sendMail_1.sendMail)(email, subject, html);
         res.json({
             code: 200,
             message: "Gửi OTP thành công",

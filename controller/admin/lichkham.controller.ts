@@ -27,26 +27,30 @@ export const index = async (req: Request, res: Response) => {
     // tên khoa và tên bác sĩ
     await Promise.all(
       lichkham.map(async (item) => {
-        const khoa = await Khoa.findOne({
-          _id: item.khoa_id,
-          deleted: false,
-        });
-        const bacsi = await BacSi.findOne({
-          _id: item.bacsi_id,
-          deleted: false,
-        });
-        if (khoa) {
-          item["nameKhoa"] = khoa.name;
+        if (item.khoa_id) {
+          const khoa = await Khoa.findOne({
+            _id: item.khoa_id,
+            deleted: false,
+          });
+          if (khoa) {
+            item["nameKhoa"] = khoa.name;
+          }
         }
-        if (bacsi) {
-          item["nameBacsi"] = bacsi.fullName;
+        if (item.bacsi_id) {
+          const bacsi = await BacSi.findOne({
+            _id: item.bacsi_id,
+            deleted: false,
+          });
+          if (bacsi) {
+            item["nameBacsi"] = bacsi.fullName;
+          }
         }
       })
     );
 
     res.json({
       code: 200,
-      lichkham,
+      lichkham:lichkham,
     });
   } catch (error) {
     console.log("loi..............", error);
@@ -176,15 +180,13 @@ export const getLinhkhamUser = async (req: Request, res: Response) => {
       item["khoaName"] = khoa.name;
     }
     console.log(lichkhamUser);
-    
+
     res.json({
       code: 200,
-      lichkhamUser
+      lichkhamUser,
     });
   } catch (error) {
     console.log("loi..............", error);
-    
-    
   }
 };
 
@@ -195,7 +197,7 @@ export const getDateNowLichkhamUser = async (req: Request, res: Response) => {
     const lichkhamUser = await LichKham.find({
       user_id: userId,
       deleted: false,
-      examination_date: { $gt: new Date() }
+      examination_date: { $gt: new Date() },
     }).lean();
 
     for (const item of lichkhamUser) {
@@ -206,17 +208,17 @@ export const getDateNowLichkhamUser = async (req: Request, res: Response) => {
         });
         item["bacsiName"] = bacsi.fullName;
         item["imageBacsi"] = bacsi.image;
-       }
+      }
       const khoa = await Khoa.findOne({
         _id: item.khoa_id,
         deleted: false,
       });
       item["khoaName"] = khoa.name;
     }
-    
+
     res.json({
       code: 200,
-      lichkhamUser: lichkhamUser.reverse()
+      lichkhamUser: lichkhamUser.reverse(),
     });
   } catch (error) {
     console.log("loi..............", error);

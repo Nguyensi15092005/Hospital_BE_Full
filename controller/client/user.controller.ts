@@ -110,7 +110,6 @@ export const forgotPassword = async (req: Request, res: Response) => {
       return;
     }
     const otp = randomNumber(6);
-
     //Lưu thông tin vào db
     const dataForgot = new ForgotPassword({
       email: email,
@@ -119,10 +118,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
     });
     await dataForgot.save();
     // gửi otp về email
-    const subject =
-      "Mã OTP xác minh đổi mật khẩu bạn không nên chia sẻ cho người khác về vấn đề bảo mật";
+    const subject ="Mã OTP xác minh đổi mật khẩu bạn không nên chia sẻ cho người khác về vấn đề bảo mật";
     const html = `Mã OTP là <b>${otp}</b> thời hạn là 3 phút`;
-    sendMail(email, subject, html);
+    await sendMail(email, subject, html);    
 
     res.json({
       code: 200,
