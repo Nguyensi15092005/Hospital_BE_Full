@@ -37,4 +37,6 @@ const express_1 = require("express");
 const controller = __importStar(require("../../controller/client/lichkham.controller"));
 const routes = (0, express_1.Router)();
 routes.post("/create", controller.create);
+routes.get("/user/:userId", controller.getLinhkhamUser);
+routes.get("/user-date-now/:userId", controller.getDateNowLichkhamUser);
 exports.default = routes;

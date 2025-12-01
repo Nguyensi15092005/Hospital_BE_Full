@@ -192,7 +192,6 @@ const getLinhkhamUser = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.getLinhkhamUser = getLinhkhamUser;
 const getDateNowLichkhamUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("Chayj ddc vao day");
         const userId = req.params.userId;
         const lichkhamUser = yield lichkham_model_1.default.find({
             user_id: userId,

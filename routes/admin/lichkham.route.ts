@@ -19,7 +19,7 @@ routes.patch("/change-status/:id/:status", controller.changeStatus);
 
 routes.get("/user/:userId", controller.getLinhkhamUser);
 
-routes.get("/user-date-now/:userId", controller.getDateNowLichkhamUser);
+routes.get("/user-date-now/:userId", controller.getDateNowLichkhamUser); // các cuộc hẹn sắp tới
 
 
 export default routes;

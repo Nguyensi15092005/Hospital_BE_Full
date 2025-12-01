@@ -192,7 +192,6 @@ export const getLinhkhamUser = async (req: Request, res: Response) => {
 
 export const getDateNowLichkhamUser = async (req: Request, res: Response) => {
   try {
-    console.log("Chayj ddc vao day");
     const userId: string = req.params.userId;
     const lichkhamUser = await LichKham.find({
       user_id: userId,
