@@ -52,6 +52,7 @@ export const index = async (req: Request, res: Response) => {
     //   bacsi: bacsi,
     // })
 
+
     res.json(
       {
         code: 200,

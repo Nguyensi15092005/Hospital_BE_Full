@@ -37,6 +37,7 @@ const express_1 = require("express");
 const controller = __importStar(require("../../controller/client/user.controller"));
 const routes = (0, express_1.Router)();
 routes.post("/login", controller.login);
+routes.post("/login-google", controller.loginGoogle);
 routes.post("/register", controller.register);
 routes.post("/password/forgot", controller.forgotPassword);
 routes.post("/password/otp", controller.otpPassword);

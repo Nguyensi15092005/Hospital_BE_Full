@@ -4,12 +4,12 @@ import User from "../../models/user.model";
 import ForgotPassword from "../../models/forgot-password.model";
 import { randomNumber, randomString } from "../../helper/generate";
 import { sendMail } from "../../helper/sendMail";
+import { jwtDecode } from "jwt-decode";
 
 export const login = async (req: Request, res: Response) => {
   try {
     console.log(req.body);
     const email = req.body.email;
-    const phone = req.body.phone;
     const password = req.body.password;
     console.log(md5(password));
 
@@ -25,12 +25,6 @@ export const login = async (req: Request, res: Response) => {
       });
       return;
     }
-    if (user.phone !== phone) {
-      res.json({
-        code: 401,
-        message: "Số điện thoại không đúng",
-      });
-    }
     if (user.password !== md5(password)) {
       console.log("sai mk");
       res.json({
@@ -39,9 +33,12 @@ export const login = async (req: Request, res: Response) => {
       });
       return;
     }
+    const userRes = await User.findOne({
+      email: email
+    }).select("-password -googleId");
     res.json({
       code: 200,
-      user: user,
+      user: userRes,
       message: "Đăng nhập thành công",
     });
   } catch (error) {
@@ -52,12 +49,53 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+export const loginGoogle = async (req: Request, res: Response) => {
+  try {
+    const tokenGoogle = req.body.options;
+    const tokenDecode = jwtDecode(tokenGoogle) as any;
+    const {email, sub, name} = tokenDecode;
+    let user = await User.findOne({
+      googleId: sub
+    });
+    if(!user){
+      user = await User.findOne({
+        email: email
+      });
+      if(user){
+        user.googleId = sub;
+        await user.save();
+      }
+      else{
+        user = await User.create({
+          fullName: name,
+          email: email,
+          googleId: sub,
+          token: randomString(30),
+        })
+      }
+    }
+
+    const userRes = await User.findOne({
+      googleId: sub
+    }).select("-password -googleId");
+    res.json({
+      code: 200,
+      user: userRes,
+      message: "Đăng nhập thành công"
+    });
+  } catch (error) {
+    console.log("Lỗi đăng nhập gg", error);
+    res.json({
+      code: 400,
+      message: "Đăng nhập thất bại",
+    });
+  }
+}
+
 export const register = async (req: Request, res: Response) => {
   try {
     console.log(req.body);
-    console.log("123");
     const email = req.body.email;
-    const phone = req.body.phone;
     const password = req.body.password;
     const user = await User.findOne({
       email: email,
@@ -71,19 +109,10 @@ export const register = async (req: Request, res: Response) => {
       });
       return;
     }
-    if (user && user.phone === phone) {
-      console.log("Số điện thoại nãy đã được đăng ký");
-      res.json({
-        code: 500,
-        message: "Số điện thoại nãy đã được đăng ký",
-      });
-      return;
-    }
     const data = new User({
       fullName: req.body.fullName,
       email: email,
       password: md5(password),
-      phone: phone,
       token: randomString(30),
     });
 
@@ -120,7 +149,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
     // gửi otp về email
     const subject ="Mã OTP xác minh đổi mật khẩu bạn không nên chia sẻ cho người khác về vấn đề bảo mật";
     const html = `Mã OTP là <b>${otp}</b> thời hạn là 3 phút`;
-    await sendMail(email, subject, html);    
+    await sendMail(email, subject, html); 
+       
 
     res.json({
       code: 200,

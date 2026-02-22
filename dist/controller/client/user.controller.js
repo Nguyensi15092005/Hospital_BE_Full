@@ -12,17 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.passwordReset = exports.otpPassword = exports.forgotPassword = exports.register = exports.login = void 0;
+exports.passwordReset = exports.otpPassword = exports.forgotPassword = exports.register = exports.loginGoogle = exports.login = void 0;
 const md5_1 = __importDefault(require("md5"));
 const user_model_1 = __importDefault(require("../../models/user.model"));
 const forgot_password_model_1 = __importDefault(require("../../models/forgot-password.model"));
 const generate_1 = require("../../helper/generate");
 const sendMail_1 = require("../../helper/sendMail");
+const jwt_decode_1 = require("jwt-decode");
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log(req.body);
         const email = req.body.email;
-        const phone = req.body.phone;
         const password = req.body.password;
         console.log((0, md5_1.default)(password));
         const user = yield user_model_1.default.findOne({
@@ -37,12 +37,6 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
             return;
         }
-        if (user.phone !== phone) {
-            res.json({
-                code: 401,
-                message: "Số điện thoại không đúng",
-            });
-        }
         if (user.password !== (0, md5_1.default)(password)) {
             console.log("sai mk");
             res.json({
@@ -51,9 +45,12 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
             return;
         }
+        const userRes = yield user_model_1.default.findOne({
+            email: email
+        }).select("-password -googleId");
         res.json({
             code: 200,
-            user: user,
+            user: userRes,
             message: "Đăng nhập thành công",
         });
     }
@@ -65,12 +62,53 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.login = login;
+const loginGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const tokenGoogle = req.body.options;
+        const tokenDecode = (0, jwt_decode_1.jwtDecode)(tokenGoogle);
+        const { email, sub, name } = tokenDecode;
+        let user = yield user_model_1.default.findOne({
+            googleId: sub
+        });
+        if (!user) {
+            user = yield user_model_1.default.findOne({
+                email: email
+            });
+            if (user) {
+                user.googleId = sub;
+                yield user.save();
+            }
+            else {
+                user = yield user_model_1.default.create({
+                    fullName: name,
+                    email: email,
+                    googleId: sub,
+                    token: (0, generate_1.randomString)(30),
+                });
+            }
+        }
+        const userRes = yield user_model_1.default.findOne({
+            googleId: sub
+        }).select("-password -googleId");
+        res.json({
+            code: 200,
+            user: userRes,
+            message: "Đăng nhập thành công"
+        });
+    }
+    catch (error) {
+        console.log("Lỗi đăng nhập gg", error);
+        res.json({
+            code: 400,
+            message: "Đăng nhập thất bại",
+        });
+    }
+});
+exports.loginGoogle = loginGoogle;
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log(req.body);
-        console.log("123");
         const email = req.body.email;
-        const phone = req.body.phone;
         const password = req.body.password;
         const user = yield user_model_1.default.findOne({
             email: email,
@@ -83,19 +121,10 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
             return;
         }
-        if (user && user.phone === phone) {
-            console.log("Số điện thoại nãy đã được đăng ký");
-            res.json({
-                code: 500,
-                message: "Số điện thoại nãy đã được đăng ký",
-            });
-            return;
-        }
         const data = new user_model_1.default({
             fullName: req.body.fullName,
             email: email,
             password: (0, md5_1.default)(password),
-            phone: phone,
             token: (0, generate_1.randomString)(30),
         });
         console.log(data);

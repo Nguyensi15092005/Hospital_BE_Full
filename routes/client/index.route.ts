@@ -8,7 +8,7 @@ import Banner from "./banner.route";
 import Setting from "./setting.route";
 import TheChucNang from "./thechucnang.route";
 import DichVuKhamBenh from "./dichvukhambenh.route";
-import TinTuc from "./tintuc.model";
+import TinTuc from "./tintuc.route";
 import User from "./user.router";
 import Lichham from "./lichkham.route";
 

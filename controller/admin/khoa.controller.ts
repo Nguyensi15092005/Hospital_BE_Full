@@ -40,6 +40,7 @@ export const index = async (req: Request, res: Response) => {
       .skip(objectPagination.skip)
       .select("id name headDepartment phone dateEstablishment status");
   
+    console.log(khoa);
     res.json({
       code:200,
       khoa: khoa
@@ -65,6 +66,7 @@ export const create = async (req: Request, res: Response) => {
 export const detail = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
+    console.log(id);
     const khoa = await Khoa.findOne({
       _id:id,
       deleted: false

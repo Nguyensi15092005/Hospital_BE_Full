@@ -37,6 +37,7 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             .limit(objectPagination.limitItems)
             .skip(objectPagination.skip)
             .select("id name headDepartment phone dateEstablishment status");
+        console.log(khoa);
         res.json({
             code: 200,
             khoa: khoa
@@ -64,6 +65,7 @@ exports.create = create;
 const detail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
+        console.log(id);
         const khoa = yield khoa_model_1.default.findOne({
             _id: id,
             deleted: false

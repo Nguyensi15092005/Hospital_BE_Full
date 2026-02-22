@@ -2,8 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Account from "../models/account.model";
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction): Promise<void>=> {
-    console.log(req.headers.authorization)
-
+  console.log(req.headers.authorization)
   try {
     if (req.headers.authorization) {
       const token: string = req.headers.authorization.split(" ")[1]

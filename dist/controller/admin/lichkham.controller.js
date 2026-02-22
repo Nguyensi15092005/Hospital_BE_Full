@@ -145,12 +145,14 @@ const sendmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user_email = req.body.user_email;
         const message = req.body.message;
+        console.log(user_email, message);
         yield lichkham_model_1.default.updateOne({ email: user_email }, { message_Reply: message });
         const name = yield setting_model_1.default.find();
         const subject = `Bệnh viện ${name[0].name}`;
         (0, sendMail_1.sendMail)(user_email, subject, message);
         res.json({
             code: 200,
+            message: "thanh cong",
         });
     }
     catch (error) {

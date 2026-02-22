@@ -7,24 +7,24 @@ exports.sendMail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const sendMail = (email, subject, html) => {
     const transporter = nodemailer_1.default.createTransport({
-        service: 'gmail',
+        service: "gmail",
         auth: {
             user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
+            pass: process.env.EMAIL_PASS,
+        },
     });
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: email,
         subject: subject,
-        html: html
+        html: html,
     };
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            console.log('Lỗi gửi mail:', error);
+            console.log("Lỗi gửi mail:", error);
         }
         else {
-            console.log('Email đã gửi: ' + info.response);
+            console.log("Email đã gửi: " + info.response);
         }
     });
 };

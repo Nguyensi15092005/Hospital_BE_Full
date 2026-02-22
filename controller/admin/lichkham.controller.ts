@@ -50,7 +50,7 @@ export const index = async (req: Request, res: Response) => {
 
     res.json({
       code: 200,
-      lichkham:lichkham,
+      lichkham: lichkham,
     });
   } catch (error) {
     console.log("loi..............", error);
@@ -146,13 +146,17 @@ export const sendmail = async (req: Request, res: Response) => {
   try {
     const user_email: string = req.body.user_email;
     const message: string = req.body.message;
+    console.log(user_email, message);
     await LichKham.updateOne({ email: user_email }, { message_Reply: message });
     const name = await Settings.find();
     const subject: string = `Bệnh viện ${name[0].name}`;
     sendMail(user_email, subject, message);
+
     res.json({
       code: 200,
-    });
+      message: "thanh cong",
+    })
+    
   } catch (error) {
     console.log("loi..............", error);
   }

@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     fullName: String,
-    password: String,
     email: String,
-    phone: String, 
+    password: String,
+    googleId: String,
     token: String, 
     deleted:{
         type:Boolean,

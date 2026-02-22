@@ -5,6 +5,8 @@ const routes: Router = Router();
 
 routes.post("/login", controller.login);
 
+routes.post("/login-google", controller.loginGoogle);
+
 routes.post("/register", controller.register);
 
 routes.post("/password/forgot", controller.forgotPassword);
