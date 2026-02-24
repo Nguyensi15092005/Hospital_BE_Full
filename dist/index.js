@@ -47,7 +47,7 @@ database.connect();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3006;
 var corsOptions = {
-    origin: 'http://localhost:3007',
+    origin: 'https://benhvien-hospital.vercel.app',
     credentials: true,
     optionsSuccessStatus: 200
 };
